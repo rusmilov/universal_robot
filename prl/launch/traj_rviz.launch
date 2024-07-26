@@ -1,0 +1,30 @@
+<launch>
+  <!-- Load the URDF -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find ur_description)/urdf/ur5.xacro" />
+
+  <!-- Start RViz -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find your_robot_description_package)/rviz/ur5_config.rviz" /> -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur_description)/cfg/view_robot.rviz" required="true" />
+
+  <!-- Start Gazebo -->
+  <!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include> -->
+
+  <!-- Load controllers -->
+  <rosparam file="$(find prl)/config/controller.yaml" command="load"/>
+
+  <!-- Start the controller manager and controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="arm_controller" />
+
+  <!-- Start the joint state publisher -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+  <!-- Start the custom joint trajectory publisher node -->
+  <node name="joint_trajectory_publisher" pkg="prl" type="joint_trajectory_publisher.py" output="screen"/>
+</launch>
