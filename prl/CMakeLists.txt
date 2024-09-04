@@ -164,6 +164,7 @@ include_directories(
 catkin_install_python(PROGRAMS
   src/joint_states_pub.py
   src/joint_trajectory_pub.py
+  src/moveit.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
